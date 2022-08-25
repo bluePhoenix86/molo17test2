@@ -1,11 +1,12 @@
+import java.io.FileNotFoundException;
+
 import csv.CsvReader;
 
 public class molo17test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
     	
     	CsvReader csvr1 = new CsvReader("prova.csv");
-    	
-    	
-        System.out.println("File exists: " + csvr1.fileExists()); // Display the string.
+    	//csvr1.setVerboseStatus(true);
+        csvr1.splitFileToRow();
     }
 }

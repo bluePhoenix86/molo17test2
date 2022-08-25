@@ -1,5 +1,7 @@
 package csv;
 
+import java.io.FileNotFoundException;
+
 interface ICsvReader {
 
 	public String getUrl();
@@ -8,8 +10,8 @@ interface ICsvReader {
 	public String getFilename();
 	public void setFilename(String filename);
 	
-	public boolean fileExists();
+	public boolean checkFile();
 	
-	public void printFile();
+	public void splitFileToRow() throws FileNotFoundException;
 	
 }
