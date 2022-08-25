@@ -17,8 +17,6 @@ public class CsvReader implements ICsvReader {
 	List<CsvRow> rows;
 	private int countOfRecords=0;
 	
-	
-	
 	public CsvReader(CsvAttributes csvAtt) {
 		this.csvAtt=csvAtt;
 		setVerboseStatus(true);		
@@ -46,7 +44,10 @@ public class CsvReader implements ICsvReader {
 	private void initFile() {
 		String filePathString= new String();
 		
-		if (!csvAtt.url.isBlank() && !csvAtt.url.isEmpty() && !csvAtt.filename.isBlank() && !csvAtt.filename.isEmpty()) {
+		if (!csvAtt.url.isBlank() && 
+			!csvAtt.url.isEmpty() && 
+			!csvAtt.filename.isBlank() && 
+			!csvAtt.filename.isEmpty()) {
 			filePathString = csvAtt.url + "/" + csvAtt.filename; 
 			
 			file = new File(filePathString);
@@ -124,6 +125,7 @@ public class CsvReader implements ICsvReader {
 		System.out.println("filename : " + csvAtt.filename);
 		System.out.println("separator :	" + csvAtt.separator);
 		System.out.println("delimiter :	" + csvAtt.delimiter);
+		System.out.println("escape :	" + csvAtt.escape);		
 		System.out.println("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
 		if(csvAtt.firstLineIsHeader) 
 				System.out.println("header : " + rows.get(0));		

@@ -73,6 +73,7 @@
         <javac srcdir="src" destdir="build/classes" includeantruntime="true"/>
     </target>
 
+	
     <target name="jar">
         <mkdir dir="build/jar"/>
         <jar destfile="build/jar/molo17test.jar" basedir="build/classes">
@@ -83,7 +84,12 @@
     </target>
 
     <target name="run">
-        <java jar="build/jar/molo17test.jar" fork="true"/>
+        <java jar="build/jar/molo17test.jar" fork="true">
+        	  <!--
+        	  <jvmarg value="-Xdebug" />
+        	  <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5432" />
+        	  -->
+        </java>
     </target>
 
 </project>

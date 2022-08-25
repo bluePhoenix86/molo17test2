@@ -5,6 +5,7 @@ public class CsvAttributes {
 	public String filename;
 	public char separator;
 	public char delimiter;
+	public char escape;
 	public boolean firstLineIsHeader;
 
 	public CsvAttributes(String filename) {
@@ -12,14 +13,15 @@ public class CsvAttributes {
 	}
 
 	public CsvAttributes(String url, String filename) {
-		this("./csv", filename,',','"',false);
+		this("./csv", filename,',','"','\\',false);
 	}
 
-	public CsvAttributes(String url, String filename, char separator, char delimiter,boolean firstLineIsHeader) {
+	public CsvAttributes(String url, String filename, char separator, char delimiter,char escape, boolean firstLineIsHeader) {
 		this.url= url;
 		this.filename = filename;
 		this.separator = separator;
 		this.delimiter = delimiter;
+		this.escape = escape;
 		this.firstLineIsHeader = firstLineIsHeader;
 	}
 	
