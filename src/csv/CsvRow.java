@@ -1,11 +1,18 @@
 package csv;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CsvRow implements ICsvRow {
 	private String row = new String();
 	private boolean isHeader = false;
 	private String header = new String();
 	
-	public CsvRow(String row) {
+	List<String> fields;
+	
+	
+	
+	public CsvRow(String row,CsvAttributes csvAtt) {
 		this.row = row;
 	}
 	

@@ -10,21 +10,19 @@ import java.util.List;
 public class CsvReader implements ICsvReader {
 
 	File file;
+	CsvAttributes csvAtt;
 	
-	private String url = new String();
-	private String filename = new String();
 	private static boolean verboseEnable = false;
 	private boolean fileIsOk = false;
 	List<CsvRow> rows;
+	private int countOfRecords=0;
 	
-	public CsvReader(String filename) {
-		this("./csv", filename);
-	}
 	
-	public CsvReader(String url, String filename) {
+	
+	public CsvReader(CsvAttributes csvAtt) {
+		this.csvAtt=csvAtt;
 		setVerboseStatus(true);		
-		setUrl(url);
-		setFilename(filename);
+		initFile();
 	}
 
 	
@@ -38,26 +36,18 @@ public class CsvReader implements ICsvReader {
 	
 	
 	public String getUrl() { 
-		return url;
+		return csvAtt.url;
 	}
-	public void setUrl(String url) { 
-		this.url= url; 
-		initFile();	
-	}
-	
+
 	public String getFilename() { 
-		return filename;
+		return csvAtt.filename;
 	}
-	public void setFilename(String filename) { 
-		this.filename = filename; 
-		initFile();		
-	}
-	
+
 	private void initFile() {
 		String filePathString= new String();
 		
-		if (!url.isBlank() && !url.isEmpty() && !filename.isBlank() && !filename.isEmpty()) {
-			filePathString = url + "/" + filename; 
+		if (!csvAtt.url.isBlank() && !csvAtt.url.isEmpty() && !csvAtt.filename.isBlank() && !csvAtt.filename.isEmpty()) {
+			filePathString = csvAtt.url + "/" + csvAtt.filename; 
 			
 			file = new File(filePathString);
 			
@@ -100,8 +90,15 @@ public class CsvReader implements ICsvReader {
 			
 			while((line=br.readLine())!=null)  
 			{  
-				CsvRow row = new CsvRow(line);
+				CsvRow row = new CsvRow(line,csvAtt);
 				rows.add(row);
+				
+				if(rows.size()==1 && csvAtt.firstLineIsHeader==true) { 
+					rows.get(0).setIsHeader(true);
+				} else {
+					countOfRecords++;	// this exclude header
+				}
+				
 				if (verboseEnable) System.out.println(row);   
 			} 
 			
@@ -116,6 +113,24 @@ public class CsvReader implements ICsvReader {
 		{  
 			e.printStackTrace();  
 		}  
-	};
+	}
+	
+	public int getCountOfReadedRecord() {
+		return countOfRecords;
+	}	
+	
+	public void printInfo() {		
+		System.out.println("url : " + csvAtt.url);
+		System.out.println("filename : " + csvAtt.filename);
+		System.out.println("separator :	" + csvAtt.separator);
+		System.out.println("delimiter :	" + csvAtt.delimiter);
+		System.out.println("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
+		if(csvAtt.firstLineIsHeader) 
+				System.out.println("header : " + rows.get(0));		
+		
+		System.out.println("record " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + countOfRecords);	
+
+	}
+	
 	
 }
