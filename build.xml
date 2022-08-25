@@ -61,7 +61,9 @@
 -->
 
 <project>
-
+	 <target name="default" depends="clean,compile,jar,run" description="the main project">
+	  </target>
+	
     <target name="clean">
         <delete dir="build"/>
     </target>
