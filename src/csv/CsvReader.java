@@ -9,20 +9,20 @@ public class CsvReader implements ICsvReader {
 	private String filename = new String();
 	
 	public CsvReader(String filename) {
-		setUrl(".");
-		setFilename(this.filename);
+		setUrl("./csv");
+		setFilename(filename);
 	}	
 	
 	public CsvReader(String url, String filename) {
-		setUrl(this.url);
-		setFilename(this.filename);
+		setUrl(url);
+		setFilename(filename);
 	}
 		
 	public String getUrl() { 
 		return url;
 	}
 	public void setUrl(String url) { 
-		url = this.url; 
+		this.url= url; 
 		initFile();	
 	}
 	
@@ -30,7 +30,7 @@ public class CsvReader implements ICsvReader {
 		return filename;
 	}
 	public void setFilename(String filename) { 
-		filename = this.filename; 
+		this.filename = filename; 
 		initFile();		
 	}
 	
