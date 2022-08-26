@@ -40,13 +40,47 @@ public class CsvRow implements ICsvRow {
 		
 		int start=0;
 		int end=-1;
+		String field = new String();
 		
 		
 		for (int i = 0; i < this.row.length(); i++) {
+			
+			if(i>6) {
+				char tmp = row.charAt(i);
+				System.out.println("debug");
+			}
+			
+			if(end>start) {
+				field=row.substring(start, end) ;
+				fields.add(  field );
+				end=start-1;
+			}			
+			
+			//------------------------------
+			
 			if(i==0) {
 				start=0;
 			}
-	
+			
+			if (i==(this.row.length()-1) ) {
+				end=i-1;
+			}
+			//------------------------------
+			
+			if(i > 0 &&
+			   row.charAt(i-1)==this.csvAtt.separator && 
+			   		(
+			   			( i>1 && row.length()>=2 && row.charAt(i-2)!=this.csvAtt.escape) ||
+			   			row.length()==1 
+			   		)
+					
+			) {
+				start=i;
+				continue;
+			}
+			
+			//------------------------------
+			
 			if (!quotedField && 
 				row.charAt(i)==this.csvAtt.delimiter &&
 					(i==0 || ( i> 0 && row.charAt(i-1)!= this.csvAtt.escape ))
@@ -55,36 +89,32 @@ public class CsvRow implements ICsvRow {
 				start = i+1;
 				continue;
 			}
-
-			if(row.charAt(i)==this.csvAtt.separator &&
-			   i > 0 &&
-			   row.charAt(i-1)!=this.csvAtt.escape) {
-				start=i+1;
-				continue;
-			}
 			
-			
-			//-------------------------------
-			
-			
-			if (i==this.row.length() ) {
-				end=i;
-			}
-			
-			if (quotedField && 
-				row.charAt(i)==this.csvAtt.delimiter && 
-				i > 0 && 
+			if (i > 0 && 
+				quotedField && 
+				row.charAt(i)==this.csvAtt.delimiter && 		
 				row.charAt(i-1)!= this.csvAtt.escape
-			) {
-				quotedField=false;
-				end=i-1;				
+				) {
+					quotedField=false;
+					end=i-1;				
+					continue;
+				}
+			//-------------------------------
+
+			
+			// found an SEPARATOR without escape
+			if(row.charAt(i)==this.csvAtt.separator &&
+				   (
+					(i > 0 && row.charAt(i-1)!=this.csvAtt.escape ) ||
+					i==0
+				   )) {
+				end=i;
 				continue;
-			}				
+			}
 				
-			if(end>start)
-				fields.add(  row.substring(start, end)  );
-	
+			
 		}
+		
 		
 	}
 	
