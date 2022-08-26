@@ -1,9 +1,11 @@
 import csv.CsvAttributes;
 import csv.CsvReader;
+import csv.database.*;
 
 public class molo17test {
 	
 	static CsvAttributes csvAtt = new CsvAttributes();	
+	static IDbConn dbConn;
 	
 	private static void printOptions() {
 		
@@ -11,17 +13,23 @@ public class molo17test {
 		System.out.println();
 		System.out.println("example molot17test.jar -csv.file PROVA.CSV");
 		System.out.println();		
-		System.out.println("\t*-csv.file NOMEFILE");
+		System.out.println("\t*-csv.file FILENAME");
 		System.out.println("\t -csv.url path of the file (UNIX format). Default ./ ");
 		System.out.println("\t -csv.separator SEPARATOR_CHAR. Default [,] ");
 		System.out.println("\t -csv.delimiter DELIMITER_CHAR. Default [\"]");
 		System.out.println("\t -csv.escape ESCAPE_CHAR. Default [\\]");
 		System.out.println("\t -csv.firstLineIsHeader 0/1. Default 1 ");
 		System.out.println("\t -csv.verbose 0/1. Default 1");
-		
+		System.out.println();		
+		System.out.println("\t-db.sqllite DBFILE.Default dbTest.sqllite --THIS IS THE DEFAULT OPTION--");
+		System.out.println("not implemented yet");		
+		System.out.println("\t-db.oracle.tnsnames TNSNAME_fileName");
+		System.out.println("\t-db.oracle.username USERNAME");
+		System.out.println("\t-db.oracle.password PASSWORD.");
+		System.out.println("\t-db.oracle.defaultschema DEFAULT_SCHEMA.");
 	}
 	
-	private static void parsingParameters(String[] args, CsvAttributes csvAtt) {
+	private static void parsingParameters(String[] args) {
 		
 		for(int i=0; i<args.length;i++) {
 			if(i%2==1) 
@@ -35,6 +43,8 @@ public class molo17test {
 			if(args[i].equals("-csv.firstLineIsHeader")) csvAtt.firstLineIsHeader=args[i+1].charAt(0)==1?true:false;
 			if(args[i].equals("-csv.verbose")) csvAtt.verboseEnable=args[i+1].charAt(0)==1?true:false;	
 			
+			if(args[i].equals("-db.sqllite")) dbConn= new DbConnSqlLite(); 
+			
 		}
 		
 		if(csvAtt.filename==null || csvAtt.filename.isBlank() || csvAtt.filename.isEmpty()) {
@@ -46,26 +56,26 @@ public class molo17test {
 	}
 	
 	
-	
     public static void main(String[] args) throws Exception {
     	
     	if(  args.length==0 || args.length%2==1  ) {
     		printOptions();
     		System.exit(0);
     	} else {
-    		parsingParameters(args,molo17test.csvAtt);
+    		parsingParameters(args);
     	}
 
     	CsvReader csvr1 = new CsvReader(molo17test.csvAtt);
         csvr1.splitFileToRow();
         csvr1.printInfo();
         
-        
+        /*
         for(int r=0; r< csvr1.getRows().size() ; r++) {
         	for(int c=0; c< csvr1.getRows().get(r).getFields().size() ; c++ ) {
-        		System.out.print( csvr1.getRows().get(r).getFields().get(c)  + "\t");
+        		System.out.print( csvr1.getRows().get(r).getFields().get(c)  + "\t\t");
         	}
         	System.out.println();
         }
+        */
     }
 }
