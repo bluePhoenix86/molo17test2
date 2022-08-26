@@ -16,7 +16,7 @@ public class CsvReader implements ICsvReader {
 	List<CsvRow> rows;
 	private int countOfRecords=0;
 	
-	public CsvReader(CsvAttributes csvAtt) {
+	public CsvReader(CsvAttributes csvAtt) throws Exception {
 		this.csvAtt=csvAtt;
 		setVerboseStatus(true);		
 		initFile();
@@ -40,7 +40,7 @@ public class CsvReader implements ICsvReader {
 		return csvAtt.filename;
 	}
 
-	private void initFile() {
+	private void initFile() throws Exception {
 		String filePathString= new String();
 		
 		if (!csvAtt.url.isBlank() && 
@@ -51,7 +51,14 @@ public class CsvReader implements ICsvReader {
 			
 			file = new File(filePathString);
 			
-			checkFile();
+			if (!checkFile()){
+				String error = "File doens't exist or it can't be readed.";
+				if(csvAtt.verboseEnable) 
+					System.out.println(error);
+				
+				throw new Exception(error);
+				
+			};
 		}
 		
 	}

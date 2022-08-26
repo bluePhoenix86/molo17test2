@@ -9,7 +9,11 @@ public class CsvAttributes {
 	public boolean firstLineIsHeader;
 	
 	public boolean verboseEnable;
-
+	
+	public CsvAttributes() {
+		this(null);
+	}
+	
 	public CsvAttributes(String filename) {
 		this("./csv", filename);
 	}
