@@ -10,7 +10,7 @@ interface ICsvReader {
 	
 	public boolean checkFile();
 	
-	public void splitFileToRow() throws FileNotFoundException;
+	public void splitFileToRow() throws Exception;
 	
 	public int getCountOfReadedRecord();	
 	

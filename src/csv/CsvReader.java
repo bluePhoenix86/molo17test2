@@ -70,12 +70,13 @@ public class CsvReader implements ICsvReader {
 		
 	};
 	
-	public void splitFileToRow() throws FileNotFoundException {
+	public void splitFileToRow() throws Exception,FileNotFoundException {
 		
 		if (!fileIsOk) {
 			if (csvAtt.verboseEnable) System.out.println("File not correctly loaded");
 			return;
 		}
+		
 		try  
 		{ 
 			FileReader fr = new FileReader(file);
@@ -113,6 +114,41 @@ public class CsvReader implements ICsvReader {
 		{  
 			e.printStackTrace();  
 		}  
+		
+		// checks
+		
+		if( getCountOfReadedRecord() > 0 )
+			if ( rows.get(0).isHeader() ) {
+				int targetNumOfField= rows.get(0).getCountOfFields();
+				
+				for(int i = 1; i < rows.size(); i++ ) {
+					if(rows.get(i).getCountOfFields() != targetNumOfField) {
+						String error = "Error in line " + i + ". Founded " + rows.get(i).getCountOfFields() + " fields but header has got " + targetNumOfField + " fields";
+						
+						if(csvAtt.verboseEnable) 
+							System.out.println(error);
+						
+						throw new Exception(error);
+					}
+				}
+			} else {
+				int prevNumOfFields,thisNumOfFields=0;
+				
+				for(int i = 0; i < rows.size(); i++ ) {
+					prevNumOfFields = thisNumOfFields;
+					thisNumOfFields= rows.get(i).getCountOfFields();
+					
+					if(i>=1 && thisNumOfFields!=prevNumOfFields) {
+						String error = "Error in line " + i + ". Founded " + thisNumOfFields + " fields but previous line has got " + prevNumOfFields + " fields";
+						
+						if(csvAtt.verboseEnable) 
+							System.out.println(error);
+						
+						throw new Exception(error);
+						
+					}
+				}
+			}
 	}
 	
 	public int getCountOfReadedRecord() {

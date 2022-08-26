@@ -8,7 +8,7 @@ public class CsvAttributes {
 	public char escape;
 	public boolean firstLineIsHeader;
 	
-	public static boolean verboseEnable;
+	public boolean verboseEnable;
 
 	public CsvAttributes(String filename) {
 		this("./csv", filename);
@@ -25,7 +25,7 @@ public class CsvAttributes {
 		this.delimiter = delimiter;
 		this.escape = escape;
 		this.firstLineIsHeader = firstLineIsHeader;
-		CsvAttributes.verboseEnable = verboseEnable;
+		this.verboseEnable = verboseEnable;
 	}
 	
 }
