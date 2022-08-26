@@ -138,6 +138,10 @@ public class CsvRow implements ICsvRow {
 		return fields.size();
 	}
 	
+	public List<String> getFields() {
+		return fields;
+	}	
+	
 	public String toString() {
 		return row;		
 	}

@@ -13,8 +13,9 @@ public class CsvReader implements ICsvReader {
 	CsvAttributes csvAtt;
 	
 	private boolean fileIsOk = false;
-	List<CsvRow> rows;
+	private List<CsvRow> rows;
 	private int countOfRecords=0;
+	private int countOfColumns=0;
 	
 	public CsvReader(CsvAttributes csvAtt) throws Exception {
 		this.csvAtt=csvAtt;
@@ -124,13 +125,13 @@ public class CsvReader implements ICsvReader {
 		
 		// checks
 		
-		if( getCountOfReadedRecord() > 0 )
+		if( getCountOfReadedRecords() > 0 )
 			if ( rows.get(0).isHeader() ) {
-				int targetNumOfField= rows.get(0).getCountOfFields();
+				countOfColumns= rows.get(0).getCountOfFields();
 				
 				for(int i = 1; i < rows.size(); i++ ) {
-					if(rows.get(i).getCountOfFields() != targetNumOfField) {
-						String error = "Error in line " + i + ". Founded " + rows.get(i).getCountOfFields() + " fields but header has got " + targetNumOfField + " fields";
+					if(rows.get(i).getCountOfFields() != countOfColumns) {
+						String error = "Error in line " + i + ". Founded " + rows.get(i).getCountOfFields() + " fields but header has got " + countOfColumns + " fields";
 						
 						if(csvAtt.verboseEnable) 
 							System.out.println(error);
@@ -139,14 +140,14 @@ public class CsvReader implements ICsvReader {
 					}
 				}
 			} else {
-				int prevNumOfFields,thisNumOfFields=0;
+				int prevNumOfFields;
 				
 				for(int i = 0; i < rows.size(); i++ ) {
-					prevNumOfFields = thisNumOfFields;
-					thisNumOfFields= rows.get(i).getCountOfFields();
+					prevNumOfFields = countOfColumns;
+					countOfColumns= rows.get(i).getCountOfFields();
 					
-					if(i>=1 && thisNumOfFields!=prevNumOfFields) {
-						String error = "Error in line " + i + ". Founded " + thisNumOfFields + " fields but previous line has got " + prevNumOfFields + " fields";
+					if(i>=1 && countOfColumns!=prevNumOfFields) {
+						String error = "Error in line " + i + ". Founded " + countOfColumns + " fields but previous line has got " + prevNumOfFields + " fields";
 						
 						if(csvAtt.verboseEnable) 
 							System.out.println(error);
@@ -158,11 +159,19 @@ public class CsvReader implements ICsvReader {
 			}
 	}
 	
-	public int getCountOfReadedRecord() {
+	public int getCountOfReadedRecords() {
 		return countOfRecords;
 	}	
+	public int getCountOfReadedColumns() {
+		return countOfColumns;
+	}		
+	
+	public List<CsvRow> getRows() {
+		return rows;
+	}
 	
 	public void printInfo() {		
+		System.out.println("--------------- CSV INFO ------------------");		
 		System.out.println("url : " + csvAtt.url);
 		System.out.println("filename : " + csvAtt.filename);
 		System.out.println("separator :	" + csvAtt.separator);
@@ -172,8 +181,10 @@ public class CsvReader implements ICsvReader {
 		if(csvAtt.firstLineIsHeader) 
 				System.out.println("header : " + rows.get(0));		
 		
-		System.out.println("record " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + countOfRecords);	
-
+		System.out.println("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + countOfRecords);	
+		System.out.println("columns " + countOfColumns);	
+		
+		System.out.println("--------------- CSV INFO ----end-----------");				
 	}
 	
 	

@@ -1,6 +1,7 @@
 package csv;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 interface ICsvReader {
 
@@ -12,7 +13,13 @@ interface ICsvReader {
 	
 	public void splitFileToRow() throws Exception,FileNotFoundException;
 	
-	public int getCountOfReadedRecord();	
+	public int getCountOfReadedRecords();	
+	
+	public int getCountOfReadedColumns();	
+	
+	public List<CsvRow> getRows();
 	
 	public void printInfo();
+	
+	
 }

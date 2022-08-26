@@ -58,8 +58,14 @@ public class molo17test {
 
     	CsvReader csvr1 = new CsvReader(molo17test.csvAtt);
         csvr1.splitFileToRow();
-    
-        
         csvr1.printInfo();
+        
+        
+        for(int r=0; r< csvr1.getRows().size() ; r++) {
+        	for(int c=0; c< csvr1.getRows().get(r).getFields().size() ; c++ ) {
+        		System.out.print( csvr1.getRows().get(r).getFields().get(c)  + "\t");
+        	}
+        	System.out.println();
+        }
     }
 }
