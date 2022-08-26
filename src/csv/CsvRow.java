@@ -41,80 +41,71 @@ public class CsvRow implements ICsvRow {
 		int start=0;
 		int end=-1;
 		String field = new String();
+
+		char tmp;
 		
-		
-		for (int i = 0; i < this.row.length(); i++) {
+		// PARSING
+		int i=0;
+		while(i <= this.row.length() && this.row.length()>0 ) {
 			
-			if(i>6) {
-				char tmp = row.charAt(i);
-				System.out.println("debug");
+			try {
+				tmp = row.charAt(i);
+					System.out.println(tmp);
+			}
+			catch (Exception e) {
+				
 			}
 			
-			if(end>start) {
+			
+			if(end>=start) {
+				if(i==this.row.length()) end++;
+				
 				field=row.substring(start, end) ;
 				fields.add(  field );
-				end=start-1;
+				start=i;
+				
+				if(i==this.row.length()) break;
+			
 			}			
 			
-			//------------------------------
-			
+			//check start and end of line		
 			if(i==0) {
-				start=0;
-			}
-			
-			if (i==(this.row.length()-1) ) {
-				end=i-1;
-			}
-			//------------------------------
-			
-			if(i > 0 &&
-			   row.charAt(i-1)==this.csvAtt.separator && 
-			   		(
-			   			( i>1 && row.length()>=2 && row.charAt(i-2)!=this.csvAtt.escape) ||
-			   			row.length()==1 
-			   		)
-					
-			) {
 				start=i;
-				continue;
 			}
 			
-			//------------------------------
-			
-			if (!quotedField && 
-				row.charAt(i)==this.csvAtt.delimiter &&
-					(i==0 || ( i> 0 && row.charAt(i-1)!= this.csvAtt.escape ))
-				) {
-				quotedField=true;
-				start = i+1;
-				continue;
+			if( i==(this.row.length()-1) ) {
+				end=i;					
 			}
 			
-			if (i > 0 && 
-				quotedField && 
-				row.charAt(i)==this.csvAtt.delimiter && 		
-				row.charAt(i-1)!= this.csvAtt.escape
-				) {
-					quotedField=false;
-					end=i-1;				
-					continue;
-				}
-			//-------------------------------
-
-			
-			// found an SEPARATOR without escape
-			if(row.charAt(i)==this.csvAtt.separator &&
-				   (
-					(i > 0 && row.charAt(i-1)!=this.csvAtt.escape ) ||
-					i==0
-				   )) {
+			//check SEPARATOR without ESCAPE
+			if( row.charAt(i)==csvAtt.separator &&
+				(
+						i==0 // start of line 
+					|| (i>0 && row.charAt(i-1)!=csvAtt.escape)
+				)	
+			) {
 				end=i;
-				continue;
-			}
-				
+			}	
 			
+			
+			i++;
+		
 		}
 		
+		
+		for(i=0; i< fields.size(); i++) {
+			String tmpReplaced;
+			
+			tmpReplaced = fields.get(i).replace(String.valueOf(csvAtt.escape) + String.valueOf(csvAtt.separator), String.valueOf(csvAtt.separator));
+			fields.set(i, tmpReplaced );  
+
+			tmpReplaced = fields.get(i).replace(String.valueOf(csvAtt.escape) + String.valueOf(csvAtt.delimiter), String.valueOf(csvAtt.delimiter));
+			fields.set(i, tmpReplaced );  
+				
+		}
+		
+		
+		tmp='x';
 		
 	}
 	

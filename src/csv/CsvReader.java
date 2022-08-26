@@ -12,7 +12,6 @@ public class CsvReader implements ICsvReader {
 	File file;
 	CsvAttributes csvAtt;
 	
-	private static boolean verboseEnable = false;
 	private boolean fileIsOk = false;
 	List<CsvRow> rows;
 	private int countOfRecords=0;
@@ -25,11 +24,11 @@ public class CsvReader implements ICsvReader {
 
 	
 	public boolean getVerboseStatus() {
-		return verboseEnable;
+		return csvAtt.verboseEnable;
 	}
 	public void setVerboseStatus(boolean verboseEnable) {
-		CsvReader.verboseEnable = verboseEnable;
-		System.out.println("CsvReader verbose : " + verboseEnable);
+		csvAtt.verboseEnable = verboseEnable;
+		System.out.println("CsvReader verbose : " + csvAtt.verboseEnable);
 	}
 	
 	
@@ -62,10 +61,10 @@ public class CsvReader implements ICsvReader {
 		fileIsOk = true; 
 		
 		fileIsOk = fileIsOk && file.exists();
-		if(verboseEnable) System.out.println("File exists :" + fileIsOk);
+		if(csvAtt.verboseEnable) System.out.println("File exists :" + fileIsOk);
 		
 		fileIsOk = fileIsOk && file.canRead();
-		if(verboseEnable) System.out.println("File can be readed :" + fileIsOk);
+		if(csvAtt.verboseEnable) System.out.println("File can be readed :" + fileIsOk);
 				
 		return fileIsOk;		
 		
@@ -74,7 +73,7 @@ public class CsvReader implements ICsvReader {
 	public void splitFileToRow() throws FileNotFoundException {
 		
 		if (!fileIsOk) {
-			if (verboseEnable) System.out.println("File not correctly loaded");
+			if (csvAtt.verboseEnable) System.out.println("File not correctly loaded");
 			return;
 		}
 		try  
@@ -85,7 +84,7 @@ public class CsvReader implements ICsvReader {
 			
 			rows = new ArrayList<CsvRow>();
 			
-			if (verboseEnable) {
+			if (csvAtt.verboseEnable) {
 				System.out.println("--------------- FILE CONTENT ------------------");
 			}
 			
@@ -100,10 +99,10 @@ public class CsvReader implements ICsvReader {
 					countOfRecords++;	// this exclude header
 				}
 				
-				if (verboseEnable) System.out.println(row);   
+				if (csvAtt.verboseEnable) System.out.println(row);   
 			} 
 			
-			if (verboseEnable) {
+			if (csvAtt.verboseEnable) {
 				System.out.println("--------------- FILE CONTENT -----end----------");
 			}
 			

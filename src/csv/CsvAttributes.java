@@ -7,22 +7,25 @@ public class CsvAttributes {
 	public char delimiter;
 	public char escape;
 	public boolean firstLineIsHeader;
+	
+	public static boolean verboseEnable;
 
 	public CsvAttributes(String filename) {
 		this("./csv", filename);
 	}
 
 	public CsvAttributes(String url, String filename) {
-		this("./csv", filename,',','"','\\',false);
+		this("./csv", filename,',','"','\\',false,true);
 	}
 
-	public CsvAttributes(String url, String filename, char separator, char delimiter,char escape, boolean firstLineIsHeader) {
+	public CsvAttributes(String url, String filename, char separator, char delimiter,char escape, boolean firstLineIsHeader, boolean verboseEnable) {
 		this.url= url;
 		this.filename = filename;
 		this.separator = separator;
 		this.delimiter = delimiter;
 		this.escape = escape;
 		this.firstLineIsHeader = firstLineIsHeader;
+		CsvAttributes.verboseEnable = verboseEnable;
 	}
 	
 }
