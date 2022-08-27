@@ -9,7 +9,7 @@ interface ICsvReader {
 	
 	public String getFilename();
 	
-	public boolean checkFile();
+	public boolean checkFile() throws Exception ;
 	
 	public void splitFileToRow() throws Exception,FileNotFoundException;
 	

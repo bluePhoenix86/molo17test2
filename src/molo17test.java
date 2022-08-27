@@ -21,20 +21,25 @@ public class molo17test {
 		System.out.println("\t -csv.firstLineIsHeader 0/1. Default 1 ");
 		System.out.println("\t -csv.verbose 0/1. Default 1");
 		System.out.println();		
-		System.out.println("\t-db.sqllite DBFILE.Default dbTest.sqllite --THIS IS THE DEFAULT OPTION--");
+		System.out.println("\t-db.sqlite DBFILE. Default dbTest.sqllite (path UNIX format) --THIS IS THE DEFAULT OPTION--");
 		System.out.println("not implemented yet");		
-		System.out.println("\t-db.oracle.tnsnames TNSNAME_fileName");
+		System.out.println("\t-db.oracle.tnsname TNSNAME_fileName");
 		System.out.println("\t-db.oracle.username USERNAME");
 		System.out.println("\t-db.oracle.password PASSWORD.");
 		System.out.println("\t-db.oracle.defaultschema DEFAULT_SCHEMA.");
 	}
 	
-	private static void parsingParameters(String[] args) {
+	private static void parsingParameters(String[] args) throws Exception {
+		
+		boolean useDefaultDb = true;
 		
 		for(int i=0; i<args.length;i++) {
 			if(i%2==1) 
 				continue;
 			
+			/* ----------------------------------
+			 * CSV PARAMETERES
+			 * ---------------------------------- */
 			if(args[i].equals("-csv.file")) csvAtt.filename= args[i+1];
 			if(args[i].equals("-csv.url")) csvAtt.url=args[i+1];
 			if(args[i].equals("-csv.separator")) csvAtt.separator=args[i+1].charAt(0);
@@ -43,7 +48,35 @@ public class molo17test {
 			if(args[i].equals("-csv.firstLineIsHeader")) csvAtt.firstLineIsHeader=args[i+1].charAt(0)==1?true:false;
 			if(args[i].equals("-csv.verbose")) csvAtt.verboseEnable=args[i+1].charAt(0)==1?true:false;	
 			
-			if(args[i].equals("-db.sqllite")) dbConn= new DbConnSqlLite(); 
+			/* ----------------------------------
+			 * DB PARAMETERES
+			 * ---------------------------------- */
+			String oracleTnsname = new String();
+			String oracleUsername = new String();
+			String oraclePassword = new String();
+			String oracleDefaultSchema = new String();
+			
+			//SqlLite
+			if(args[i].equals("-db.sqlite")) {
+				dbConn= new DbConnSQLite(args[i+1]); 
+			}
+			
+			//Oracle
+			if(args[i].equals("-db.oracle.tnsname")) oracleTnsname= args[i+1];; 
+			if(args[i].equals("-db.oracle.username")) oracleUsername= args[i+1]; 
+			if(args[i].equals("-db.oracle.password")) oraclePassword= args[i+1]; 
+			if(args[i].equals("-db.oracle.defaultschema")) oracleDefaultSchema= args[i+1]; 
+			
+			if( !oracleTnsname.isBlank() && !oracleTnsname.isEmpty() &&
+				!oracleUsername.isBlank() && !oracleUsername.isEmpty() &&
+				!oraclePassword.isBlank() && !oraclePassword.isEmpty() &&
+				!oracleDefaultSchema.isBlank() && !oracleDefaultSchema.isEmpty()) {
+				
+					dbConn= new DbConnOracle(oracleTnsname, oracleUsername, oraclePassword, oracleDefaultSchema);
+			}
+			 
+			useDefaultDb=(dbConn==null);
+			
 			
 		}
 		
@@ -51,6 +84,10 @@ public class molo17test {
 			System.out.println("Missing FILENAME");
 			printOptions();
 			System.exit(1);
+		}
+		
+		if(useDefaultDb) {
+			dbConn= new DbConnSQLite("dbTest.sqllite"); 
 		}
 		
 	}

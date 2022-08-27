@@ -65,18 +65,25 @@ public class CsvReader implements ICsvReader {
 	}
 	
 
-	public boolean checkFile() {
+	public boolean checkFile() throws Exception {
 		fileIsOk = true; 
 		
 		fileIsOk = fileIsOk && file.exists();
-		if(csvAtt.verboseEnable) System.out.println("File exists :" + fileIsOk);
+		if(csvAtt.verboseEnable) 
+			System.out.println("File exists :" + fileIsOk);
+		if(!fileIsOk) 
+			throw new Exception("File doesn't exist");
+		
 		
 		fileIsOk = fileIsOk && file.canRead();
-		if(csvAtt.verboseEnable) System.out.println("File can be readed :" + fileIsOk);
-				
+		if(csvAtt.verboseEnable) 
+			System.out.println("File can be readed :" + fileIsOk);
+		if(!fileIsOk) 
+			throw new Exception("File can't be readed");
+		
 		return fileIsOk;		
 		
-	};
+	}
 	
 	public void splitFileToRow() throws Exception,FileNotFoundException {
 		

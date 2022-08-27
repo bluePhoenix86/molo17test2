@@ -1,67 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. -->
-<!--
-<project basedir="." default="build" name="molo17test2">
-    <property environment="env"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="17"/>
-    <property name="source" value="17"/>
-    <path id="molo17test2.classpath">
-        <pathelement location="bin"/>
-    </path>
-    <path id="run.molo17test.classpath">
-        <path refid="molo17test2.classpath"/>
-    </path>
-    <target name="init">
-        <mkdir dir="bin"/>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="clean">
-        <delete dir="bin"/>
-    </target>
-    <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project" name="build"/>
-    <target name="build-subprojects"/>
-    <target depends="init" name="build-project">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/>
-            <classpath refid="molo17test2.classpath"/>
-        </javac>
-    </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
-    <target name="molo17test">
-        <java classname="molo17test" failonerror="true" fork="yes">
-            <classpath refid="run.molo17test.classpath"/>
-        </java>
-    </target>
-</project>
--->
 
 <project>
-	 <target name="default" depends="clean,compile,jar,run" description="the main project">
+	<path id="libs">
+	    <pathelement location="lib/sqlite-jdbc-3.36.0.3.jar"/>
+	</path>	
+	
+	 <target name="all" depends="clean,compile,jar,run" description="the main project">
 	  </target>
 	
     <target name="clean">
@@ -70,7 +14,11 @@
 
     <target name="compile">
         <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes" includeantruntime="true"/>
+        <javac srcdir="src" destdir="build/classes" includeantruntime="true">
+        	  <classpath>
+        	    <path refid="libs" />
+        	  </classpath>        
+        </javac>
     </target>
 
 	
@@ -84,12 +32,7 @@
     </target>
 
     <target name="run">
-        <java jar="build/jar/molo17test.jar" fork="true">
-        	  <!--
-        	  <jvmarg value="-Xdebug" />
-        	  <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5432" />
-        	  -->
-        </java>
+        <java jar="build/jar/molo17test.jar" fork="true"/>
     </target>
 
 </project>
