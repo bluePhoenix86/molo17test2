@@ -4,10 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 interface ICsvReader {
-
-	public String getUrl();
-	
-	public String getFilename();
 	
 	public boolean checkFile() throws Exception ;
 	
@@ -17,7 +13,8 @@ interface ICsvReader {
 	
 	public int getCountOfReadedColumns();	
 	
-	public List<CsvRow> getRows();
+	public List<String> getHeader();	
+	public List<List<?>> getRows();
 	
 	public void printInfo();
 	

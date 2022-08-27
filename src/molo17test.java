@@ -102,14 +102,15 @@ public class molo17test {
     		parsingParameters(args);
     	}
 
-    	CsvReader csvr1 = new CsvReader(molo17test.csvAtt);
-        csvr1.splitFileToRow();
-        csvr1.printInfo();
+    	CsvReader csv1 = new CsvReader(molo17test.csvAtt);
+        csv1.splitFileToRow();
+        csv1.printInfo();
+        
         
         /*
-        for(int r=0; r< csvr1.getRows().size() ; r++) {
-        	for(int c=0; c< csvr1.getRows().get(r).getFields().size() ; c++ ) {
-        		System.out.print( csvr1.getRows().get(r).getFields().get(c)  + "\t\t");
+        for(int r=0; r< csv1.getRows().size() ; r++) {
+        	for(int c=0; c< csv1.getRows().get(r).getFields().size() ; c++ ) {
+        		System.out.print( csv1.getRows().get(r).getFields().get(c)  + "\t\t");
         	}
         	System.out.println();
         }

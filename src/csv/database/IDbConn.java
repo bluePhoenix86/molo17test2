@@ -8,7 +8,9 @@ public interface IDbConn {
 	
 	public boolean closeConnection();
 	
-	public List<List<Object>> executeStatement(String stmt);
+	public List<List<?>> executeStatement(String stmt);
 	
-
+	public boolean insertToCityStatCsvLoad(List<String> fieldsName, List<List<?>> records);
+	
+	
 }

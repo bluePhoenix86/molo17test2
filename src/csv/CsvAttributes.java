@@ -19,7 +19,7 @@ public class CsvAttributes {
 	}
 
 	public CsvAttributes(String url, String filename) {
-		this("./csv", filename,',','"','\\',false,true);
+		this("./csv", filename,',','"','\\',true,true);
 	}
 
 	public CsvAttributes(String url, String filename, char separator, char delimiter,char escape, boolean firstLineIsHeader, boolean verboseEnable) {

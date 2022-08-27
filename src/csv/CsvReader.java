@@ -13,8 +13,8 @@ public class CsvReader implements ICsvReader {
 	CsvAttributes csvAtt;
 	
 	private boolean fileIsOk = false;
-	private List<CsvRow> rows;
-	private int countOfRecords=0;
+	private List<String> header;	
+	private List<List<?>> rows;
 	private int countOfColumns=0;
 	
 	public CsvReader(CsvAttributes csvAtt) throws Exception {
@@ -32,15 +32,6 @@ public class CsvReader implements ICsvReader {
 		System.out.println("CsvReader verbose : " + csvAtt.verboseEnable);
 	}
 	
-	
-	public String getUrl() { 
-		return csvAtt.url;
-	}
-
-	public String getFilename() { 
-		return csvAtt.filename;
-	}
-
 	private void initFile() throws Exception {
 		String filePathString= new String();
 		
@@ -92,30 +83,36 @@ public class CsvReader implements ICsvReader {
 			return;
 		}
 		
+		// ----------------------------------------
+		// Parsing csvRows
+		// ----------------------------------------		
 		try  
 		{ 
 			FileReader fr = new FileReader(file);
 			BufferedReader br=new BufferedReader(fr);
 			String line;  
-			
-			rows = new ArrayList<CsvRow>();
+
 			
 			if (csvAtt.verboseEnable) {
 				System.out.println("--------------- FILE CONTENT ------------------");
 			}
 			
+			int i=0;
 			while((line=br.readLine())!=null)  
 			{  
-				CsvRow row = new CsvRow(line,csvAtt);
-				rows.add(row);
+				if(rows==null) rows=new ArrayList<List<?>>();
+				CsvRow csvRow = new CsvRow(line,csvAtt);
 				
-				if(rows.size()==1 && csvAtt.firstLineIsHeader==true) { 
-					rows.get(0).setIsHeader(true);
+				if(i==0 && rows.size()==0 && csvAtt.firstLineIsHeader==true) { 
+					csvRow.setIsHeader(true);
+					this.header = csvRow.getFields();
 				} else {
-					countOfRecords++;	// this exclude header
+					this.rows.add(csvRow.getFields());
 				}
 				
-				if (csvAtt.verboseEnable) System.out.println(row);   
+				if (csvAtt.verboseEnable) System.out.println(csvRow);   
+				
+				i++;
 			} 
 			
 			if (csvAtt.verboseEnable) {
@@ -130,15 +127,17 @@ public class CsvReader implements ICsvReader {
 			e.printStackTrace();  
 		}  
 		
+
+		// ----------------------------------------
 		// checks
-		
-		if( getCountOfReadedRecords() > 0 )
-			if ( rows.get(0).isHeader() ) {
-				countOfColumns= rows.get(0).getCountOfFields();
+		// ----------------------------------------
+		if( getCountOfReadedRecords() > 0 ) {
+			if ( csvAtt.firstLineIsHeader ) {
+				countOfColumns= header.size();
 				
 				for(int i = 1; i < rows.size(); i++ ) {
-					if(rows.get(i).getCountOfFields() != countOfColumns) {
-						String error = "Error in line " + i + ". Founded " + rows.get(i).getCountOfFields() + " fields but header has got " + countOfColumns + " fields";
+					if(rows.get(i).size() != countOfColumns) {
+						String error = "Error in line " + i + ". Founded " + rows.get(i).size() + " fields but header has got " + countOfColumns + " fields";
 						
 						if(csvAtt.verboseEnable) 
 							System.out.println(error);
@@ -151,7 +150,7 @@ public class CsvReader implements ICsvReader {
 				
 				for(int i = 0; i < rows.size(); i++ ) {
 					prevNumOfFields = countOfColumns;
-					countOfColumns= rows.get(i).getCountOfFields();
+					countOfColumns= rows.get(i).size();
 					
 					if(i>=1 && countOfColumns!=prevNumOfFields) {
 						String error = "Error in line " + i + ". Founded " + countOfColumns + " fields but previous line has got " + prevNumOfFields + " fields";
@@ -164,17 +163,23 @@ public class CsvReader implements ICsvReader {
 					}
 				}
 			}
+		}
 	}
 	
 	public int getCountOfReadedRecords() {
-		return countOfRecords;
+		return rows.size();
 	}	
 	public int getCountOfReadedColumns() {
 		return countOfColumns;
 	}		
+
 	
-	public List<CsvRow> getRows() {
-		return rows;
+	public List<String> getHeader(){
+		return this.header;		
+	}
+	
+	public List<List<?>> getRows() {
+		return this.rows;
 	}
 	
 	public void printInfo() {		
@@ -186,9 +191,9 @@ public class CsvReader implements ICsvReader {
 		System.out.println("escape :	" + csvAtt.escape);		
 		System.out.println("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
 		if(csvAtt.firstLineIsHeader) 
-				System.out.println("header : " + rows.get(0));		
+				System.out.println("header : " + header);		
 		
-		System.out.println("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + countOfRecords);	
+		System.out.println("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + rows.size());	
 		System.out.println("columns " + countOfColumns);	
 		
 		System.out.println("--------------- CSV INFO ----end-----------");				

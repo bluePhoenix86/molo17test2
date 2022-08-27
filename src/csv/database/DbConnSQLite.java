@@ -65,9 +65,35 @@ public class DbConnSQLite implements IDbConn {
 	}
 
 	@Override
-	public List<List<Object>> executeStatement(String stmt) {
+	public List<List<?>> executeStatement(String stmt) {
 		return null;
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean insertToCityStatCsvLoad(List<String> fieldsName, List<List<?>> records) {
+		String stmt = new String();
+		String tableName = "city_stat_csv_load";
+		
+		stmt="INSERT INTO " + tableName;
+		
+		if(fieldsName!=null && fieldsName.size()>0) {
+			stmt+="(";
+			
+			for(int i=0; i<fieldsName.size();i++) {
+				stmt+=fieldsName.get(i);
+				
+				if (i==(fieldsName.size()-1)) {
+					stmt+=",";
+				}
+			}
+			
+			stmt+=")\nVALUES";			
+		}
+		
+		System.out.println(stmt);
+		
+		return true;
 	}
 
 
