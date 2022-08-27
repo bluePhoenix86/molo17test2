@@ -178,7 +178,7 @@ public class CsvReader implements ICsvReader {
 		return this.header;		
 	}
 	
-	public List<List<?>> getRows() {
+	public List<List<?>> getRecords() {
 		return this.rows;
 	}
 	

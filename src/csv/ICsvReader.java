@@ -14,7 +14,7 @@ interface ICsvReader {
 	public int getCountOfReadedColumns();	
 	
 	public List<String> getHeader();	
-	public List<List<?>> getRows();
+	public List<List<?>> getRecords();
 	
 	public void printInfo();
 	

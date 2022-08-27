@@ -107,6 +107,8 @@ public class molo17test {
         csv1.printInfo();
         
         
+        dbConn.insertToCityStatCsvLoad(csv1.getHeader(), csv1.getRecords());
+        
         /*
         for(int r=0; r< csv1.getRows().size() ; r++) {
         	for(int c=0; c< csv1.getRows().get(r).getFields().size() ; c++ ) {
