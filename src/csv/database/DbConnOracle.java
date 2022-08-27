@@ -38,6 +38,19 @@ public class DbConnOracle implements IDbConn {
 	}
 
 	@Override
+	public boolean init001_city_stat() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean init002_city_stat_csv_load() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public List<List<?>> executeStatement(String stmt) {
 		return null;
 		// TODO Auto-generated method stub
@@ -45,7 +58,14 @@ public class DbConnOracle implements IDbConn {
 	}
 
 	@Override
-	public boolean insertToCityStatCsvLoad(List<String> fieldsName, List<List<?>> records) {
+	public boolean loadCsvIntoTmpTable(List<String> fieldsName, List<List<?>> records) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean publishCsv() {
 		// TODO Auto-generated method stub
 		return false;
 	}

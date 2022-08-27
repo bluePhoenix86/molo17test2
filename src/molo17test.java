@@ -94,6 +94,7 @@ public class molo17test {
 	
 	
     public static void main(String[] args) throws Exception {
+    	boolean result;
     	
     	if(  args.length==0 || args.length%2==1  ) {
     		printOptions();
@@ -107,15 +108,18 @@ public class molo17test {
         csv1.printInfo();
         
         
-        dbConn.insertToCityStatCsvLoad(csv1.getHeader(), csv1.getRecords());
-        
-        /*
-        for(int r=0; r< csv1.getRows().size() ; r++) {
-        	for(int c=0; c< csv1.getRows().get(r).getFields().size() ; c++ ) {
-        		System.out.print( csv1.getRows().get(r).getFields().get(c)  + "\t\t");
-        	}
-        	System.out.println();
+        result=dbConn.loadCsvIntoTmpTable(csv1.getHeader(), csv1.getRecords());
+        if(!result) {
+        	throw new Exception("Something went wrong on \"loadCsvIntoTmpTable\"");
         }
-        */
+        
+        result=dbConn.publishCsv();
+        if(!result) {
+        	throw new Exception("Something went wrong on \"publishCsv\"");
+        }           
+        
+
+        
+
     }
 }
