@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project>
+	<path id="libs">
+	    <pathelement location="lib/sqlite-jdbc-3.36.0.3.jar"/>
+	</path>	
+	
+	 <target name="all" depends="clean,compile,jar,run" description="the main project">
+	  </target>
+	
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes" includeantruntime="true">
+        	  <classpath>
+        	    <path refid="libs" />
+        	  </classpath>        
+        </javac>
+    </target>
+
+	
+    <target name="jar">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/molo17test.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="molo17test"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+        <java jar="build/jar/molo17test.jar" fork="true"/>
+    </target>
+
+</project>
+
