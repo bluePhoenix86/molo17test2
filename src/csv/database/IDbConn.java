@@ -1,6 +1,8 @@
 package csv.database;
 
 import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface IDbConn {	
 
@@ -16,4 +18,6 @@ public interface IDbConn {
 	public boolean loadCsvIntoTmpTable(List<String> fieldsName, List<List<?>> records);
 	
 	public boolean publishCsv();
+
+	public ResultSet executeQuery(String stmt) throws SQLException ;
 }

@@ -1,11 +1,11 @@
 package csv.database;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DbConnSQLite implements IDbConn {
@@ -264,7 +264,16 @@ public class DbConnSQLite implements IDbConn {
 			}	
 		
 		return true;
+		
 	}
 
+	@Override
+	public ResultSet executeQuery(String stmt) throws SQLException {
+		openConnection();		
+		PreparedStatement pstmt = conn.prepareStatement(stmt);
+		
+		return pstmt.executeQuery();	
+	}
+	
 
 }

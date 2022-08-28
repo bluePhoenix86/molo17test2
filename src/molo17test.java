@@ -1,6 +1,7 @@
 import csv.CsvAttributes;
 import csv.CsvReader;
 import csv.database.*;
+import java.sql.ResultSet;
 
 public class molo17test {
 	
@@ -118,8 +119,22 @@ public class molo17test {
         	throw new Exception("Something went wrong on \"publishCsv\"");
         }           
         
-
+        //---------------------------------
         
+        ResultSet rs = dbConn.executeQuery("select max(density) as max,avg(density), count(1) as avg from city_stat_csv_load");
 
+        System.out.println("-------------------------------------------------");
+        System.out.println("-- imported CVS --");             
+        System.out.println("DENSITY MAX : " + rs.getFloat(1));        
+        System.out.println("DENSITY AVG : " + rs.getFloat(2));
+        System.out.println("ROWS COUNT : " + rs.getInt(3));        
+
+        rs = dbConn.executeQuery("select max(density) as max,avg(density)as avg, count(1) from city_stat");
+
+        System.out.println("-------------------------------------------------");
+        System.out.println("-- all historical imports (including this CSV) --");        
+        System.out.println("DENSITY MAX : " + rs.getFloat(1));        
+        System.out.println("DENSITY AVG : " + rs.getFloat(2));
+        System.out.println("ROWS COUNT : " + rs.getInt(3));       
     }
 }

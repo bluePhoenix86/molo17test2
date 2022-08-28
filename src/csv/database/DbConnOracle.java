@@ -1,4 +1,6 @@
 package csv.database;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DbConnOracle implements IDbConn {
@@ -68,6 +70,13 @@ public class DbConnOracle implements IDbConn {
 	public boolean publishCsv() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public ResultSet executeQuery(String stmt) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
