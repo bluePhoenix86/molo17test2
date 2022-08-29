@@ -2,8 +2,10 @@ package csv;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class CsvRow implements ICsvRow {
+	static Logger log = Logger.getLogger(CsvRow.class.getName()); 	
 	private String row = new String();
 	private CsvAttributes csvAtt;
 	

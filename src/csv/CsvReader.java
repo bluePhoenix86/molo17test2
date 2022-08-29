@@ -165,21 +165,18 @@ public class CsvReader implements ICsvReader {
 		return this.rows;
 	}
 	
-	public void printInfo() {		
-		System.out.println("--------------- CSV INFO ------------------");		
-		System.out.println("url : " + csvAtt.url);
-		System.out.println("filename : " + csvAtt.filename);
-		System.out.println("separator :	" + csvAtt.separator);
-		System.out.println("delimiter :	" + csvAtt.delimiter);
-		System.out.println("escape :	" + csvAtt.escape);		
-		System.out.println("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
+	public void printInfo() {				
+		log.info("url : " + csvAtt.url);
+		log.info("filename : " + csvAtt.filename);
+		log.info("separator :	" + csvAtt.separator);
+		log.info("delimiter :	" + csvAtt.delimiter);
+		log.info("escape :	" + csvAtt.escape);		
+		log.info("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
 		if(csvAtt.firstLineIsHeader) 
-				System.out.println("header : " + header);		
+				log.info("header : " + header);		
+		log.info("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + rows.size());	
+		log.info("columns " + countOfColumns);	
 		
-		System.out.println("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + rows.size());	
-		System.out.println("columns " + countOfColumns);	
-		
-		System.out.println("--------------- CSV INFO ----end-----------");				
 	}
 	
 	
