@@ -2,11 +2,13 @@ import csv.CsvAttributes;
 import csv.CsvReader;
 import csv.database.*;
 import java.sql.ResultSet;
+import org.apache.log4j.Logger;  
 
 public class molo17test {
 	
 	static CsvAttributes csvAtt = new CsvAttributes();	
 	static IDbConn dbConn;
+	static Logger log = Logger.getLogger(molo17test.class.getName()); 
 	
 	private static void printOptions() {
 		
@@ -20,7 +22,6 @@ public class molo17test {
 		System.out.println("\t -csv.delimiter DELIMITER_CHAR. Default [\"]");
 		System.out.println("\t -csv.escape ESCAPE_CHAR. Default [\\]");
 		System.out.println("\t -csv.firstLineIsHeader 0/1. Default 1 ");
-		System.out.println("\t -csv.verbose 0/1. Default 1");
 		System.out.println();		
 		System.out.println("\t-db.sqlite DBFILE. Default dbTest.sqllite (path UNIX format) --THIS IS THE DEFAULT OPTION--");
 		System.out.println("not implemented yet");		
@@ -46,9 +47,7 @@ public class molo17test {
 			if(args[i].equals("-csv.separator")) csvAtt.separator=args[i+1].charAt(0);
 			if(args[i].equals("-csv.delimiter")) csvAtt.delimiter=args[i+1].charAt(0);
 			if(args[i].equals("-csv.escape")) csvAtt.escape=args[i+1].charAt(0);
-			if(args[i].equals("-csv.firstLineIsHeader")) csvAtt.firstLineIsHeader=args[i+1].charAt(0)==1?true:false;
-			if(args[i].equals("-csv.verbose")) csvAtt.verboseEnable=args[i+1].charAt(0)==1?true:false;	
-			
+			if(args[i].equals("-csv.firstLineIsHeader")) csvAtt.firstLineIsHeader=args[i+1].charAt(0)==1?true:false;			
 			/* ----------------------------------
 			 * DB PARAMETERES
 			 * ---------------------------------- */
@@ -97,8 +96,11 @@ public class molo17test {
     public static void main(String[] args) throws Exception {
     	boolean result;
     	
+    	log.info("prova");
+    	
     	if(  args.length==0 || args.length%2==1  ) {
     		printOptions();
+    		log.debug("wrong arguments number");
     		System.exit(0);
     	} else {
     		parsingParameters(args);
