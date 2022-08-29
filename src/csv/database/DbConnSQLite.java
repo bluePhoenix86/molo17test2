@@ -2,6 +2,11 @@ package csv.database;
 
 import java.io.File;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import csv.CsvReader;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,32 +15,45 @@ import java.sql.SQLException;
 
 public class DbConnSQLite implements IDbConn {
 
+	static Logger log = Logger.getLogger(DbConnSQLite.class.getName()); 
 	String dbFilePath = new String();
 	Connection conn = null;
 	
 	public DbConnSQLite(String dbFilePath) throws Exception {
 		this.dbFilePath = dbFilePath;
+		String error;
 		
 		//-------------------------------------------------
 		File file = new File(dbFilePath);
 		
-		if(!file.exists()) 
-			throw new Exception("File doesn't exist");
-
-		if(!file.canRead()) 
-			throw new Exception("File can't be readed");		
+		if(!file.exists()) { 
+			error="File doesn't exist";
+			log.error(error);
+			throw new Exception(error);
+		}
+		
+		if(!file.canRead()) {
+			error="File can't be readed";
+			log.error(error);
+			throw new Exception(error);
+		}
 		//-------------------------------------------------
 		// open + close connection for testing
 		try {
-			if(!openConnection()) 
-				throw new Exception("SQLite DbFile doesn't open.");
-			
+			if(!openConnection()) {
+				error="SQLite DbFile doesn't open";
+				log.error(error);
+				throw new Exception(error);
+			}
 		} catch(Exception e) {
 			throw new Exception(e);
 		}
 		try {
-			if(!closeConnection()) 
-				throw new Exception("I'm not able to close SQLite DbFile.");
+			if(!closeConnection()) {
+				error="I'm not able to close SQLite DbFile";
+				log.error(error);
+				throw new Exception(error);
+			}
 			
 		} catch(Exception e) {
 			throw new Exception(e);
@@ -50,11 +68,10 @@ public class DbConnSQLite implements IDbConn {
 		
 		try {
 			String url="jdbc:sqlite:"+dbFilePath;
-			
 			conn = DriverManager.getConnection(url);
 			
 		} catch(SQLException e) {
-			System.out.println(e.getSQLState());
+			log.error(e.getSQLState());
 			return false;
 		} 
 		
@@ -93,19 +110,17 @@ public class DbConnSQLite implements IDbConn {
 + "        ,population      real\r\n"
 + "        ,density         real\r\n"
 + ")";
-				
-				//System.out.println(stmt);
-		
+					
 				openConnection();		
 				try(Connection conn = this.conn;
 					PreparedStatement pstmt = conn.prepareStatement(stmt)
 					)
 				{
-					//System.out.println(stmt);
+					log.debug(stmt);
 					int output = pstmt.executeUpdate();	
-					System.out.println("Table CITY_STAT created");	
+					log.info("Table CITY_STAT created");	
 				} catch (SQLException e) {
-					//System.out.println(e.getMessage());
+					log.error(e.getMessage());
 					return false;
 				}	
 			
@@ -124,30 +139,21 @@ public class DbConnSQLite implements IDbConn {
 + "        ,population      real\r\n"
 + "        ,density         real\r\n"
 + ")";
-				
-				//System.out.println(stmt);
-		
 				openConnection();		
 				try(Connection conn = this.conn;
 					PreparedStatement pstmt = conn.prepareStatement(stmt)
 					)
 				{
-					//System.out.println(stmt);
+					log.debug(stmt);
 					int output = pstmt.executeUpdate();	
-					System.out.println("Table CITY_STAT_CSV_LOAD created");	
+					log.info("Table CITY_STAT_CSV_LOAD created");	
 				} catch (SQLException e) {
-					//System.out.println(e.getMessage());
+					log.error(e.getMessage());
 					return false;
 				}	
 			
 			return true;
 	}	
-
-	@Override
-	public List<List<?>> executeStatement(String stmt) {
-		return null;
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public boolean loadCsvIntoTmpTable(List<String> fieldsName, List<List<?>> records) {
@@ -162,16 +168,16 @@ public class DbConnSQLite implements IDbConn {
 		// truncate temp table
 		// ----------------------------
 		stmt="delete from " + tableName;
-		System.out.println(stmt);
+		log.debug(stmt);
 
 		openConnection();		
 		try(Connection conn = this.conn;
 			PreparedStatement pstmt = conn.prepareStatement(stmt)
 			)
 		{
-			System.out.println(pstmt.executeUpdate() + " record deleted");			
+			log.info(pstmt.executeUpdate() + " record deleted");			
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			log.error(e.getMessage());
 			return false;
 		}	
 
@@ -194,8 +200,7 @@ public class DbConnSQLite implements IDbConn {
 			stmtInsert+=")VALUES";			
 		}
 		
-		
-		
+				
 		for(int r=0;r<records.size(); r++) {
 			List<?> record = records.get(r);
 			String stmtValues = new String();			
@@ -222,11 +227,11 @@ public class DbConnSQLite implements IDbConn {
 					PreparedStatement pstmt = conn.prepareStatement(stmt)
 					)
 				{
-					System.out.println(stmt);
+					log.debug(stmt);
 					int output = pstmt.executeUpdate();	
-					System.out.println(output + " record inserted");	
+					log.info(output + " record inserted");	
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
+					log.error(e.getMessage());
 					return false;
 				}
 			
@@ -248,18 +253,16 @@ public class DbConnSQLite implements IDbConn {
 			+ "      ,city,state,altitude,area_kmq,population,density\r\n"
 			+ "from city_stat_csv_load";
 			
-			System.out.println(stmt);
-	
 			openConnection();		
 			try(Connection conn = this.conn;
 				PreparedStatement pstmt = conn.prepareStatement(stmt)
 				)
 			{
-				System.out.println(stmt);
+				log.debug(stmt);
 				int output = pstmt.executeUpdate();	
-				System.out.println(output + " record inserted");	
+				log.info(output + " record inserted");	
 			} catch (SQLException e) {
-				System.out.println(e.getMessage());
+				log.error(e.getMessage());
 				return false;
 			}	
 		
@@ -271,7 +274,7 @@ public class DbConnSQLite implements IDbConn {
 	public ResultSet executeQuery(String stmt) throws SQLException {
 		openConnection();		
 		PreparedStatement pstmt = conn.prepareStatement(stmt);
-		
+		log.debug(stmt);		
 		return pstmt.executeQuery();	
 	}
 	

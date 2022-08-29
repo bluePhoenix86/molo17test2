@@ -53,13 +53,6 @@ public class DbConnOracle implements IDbConn {
 	}
 
 	@Override
-	public List<List<?>> executeStatement(String stmt) {
-		return null;
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean loadCsvIntoTmpTable(List<String> fieldsName, List<List<?>> records) {
 		// TODO Auto-generated method stub
 		return false;

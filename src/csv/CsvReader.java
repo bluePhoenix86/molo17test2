@@ -6,9 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;  
 
 public class CsvReader implements ICsvReader {
 
+	static Logger log = Logger.getLogger(CsvReader.class.getName()); 
 	File file;
 	CsvAttributes csvAtt;
 	
@@ -18,18 +20,8 @@ public class CsvReader implements ICsvReader {
 	private int countOfColumns=0;
 	
 	public CsvReader(CsvAttributes csvAtt) throws Exception {
-		this.csvAtt=csvAtt;
-		setVerboseStatus(true);		
+		this.csvAtt=csvAtt;	
 		initFile();
-	}
-
-	
-	public boolean getVerboseStatus() {
-		return csvAtt.verboseEnable;
-	}
-	public void setVerboseStatus(boolean verboseEnable) {
-		csvAtt.verboseEnable = verboseEnable;
-		System.out.println("CsvReader verbose : " + csvAtt.verboseEnable);
 	}
 	
 	private void initFile() throws Exception {
@@ -45,9 +37,7 @@ public class CsvReader implements ICsvReader {
 			
 			if (!checkFile()){
 				String error = "File doens't exist or it can't be readed.";
-				if(csvAtt.verboseEnable) 
-					System.out.println(error);
-				
+				log.error(error);				
 				throw new Exception(error);
 				
 			};
@@ -58,20 +48,23 @@ public class CsvReader implements ICsvReader {
 
 	public boolean checkFile() throws Exception {
 		fileIsOk = true; 
+		String error;
 		
 		fileIsOk = fileIsOk && file.exists();
-		if(csvAtt.verboseEnable) 
-			System.out.println("File exists :" + fileIsOk);
-		if(!fileIsOk) 
-			throw new Exception("File doesn't exist");
-		
+		log.info("File exists :" + fileIsOk);
+		if(!fileIsOk) {
+			error="File doesn't exist";
+			log.error(error);
+			throw new Exception(error);
+		}
 		
 		fileIsOk = fileIsOk && file.canRead();
-		if(csvAtt.verboseEnable) 
-			System.out.println("File can be readed :" + fileIsOk);
-		if(!fileIsOk) 
-			throw new Exception("File can't be readed");
-		
+		log.info("File can be readed :" + fileIsOk);
+		if(!fileIsOk) {
+			error="File can't be readed";
+			log.error(error);
+			throw new Exception(error);
+		}
 		return fileIsOk;		
 		
 	}
@@ -79,7 +72,7 @@ public class CsvReader implements ICsvReader {
 	public void splitFileToRow() throws Exception,FileNotFoundException {
 		
 		if (!fileIsOk) {
-			if (csvAtt.verboseEnable) System.out.println("File not correctly loaded");
+			log.error("File not correctly loaded");
 			return;
 		}
 		
@@ -93,9 +86,7 @@ public class CsvReader implements ICsvReader {
 			String line;  
 
 			
-			if (csvAtt.verboseEnable) {
-				System.out.println("--------------- FILE CONTENT ------------------");
-			}
+			log.info("--------------- FILE CONTENT ------------------");
 			
 			int i=0;
 			while((line=br.readLine())!=null)  
@@ -110,14 +101,12 @@ public class CsvReader implements ICsvReader {
 					this.rows.add(csvRow.getFields());
 				}
 				
-				if (csvAtt.verboseEnable) System.out.println(csvRow);   
+				log.info(csvRow);   
 				
 				i++;
 			} 
 			
-			if (csvAtt.verboseEnable) {
-				System.out.println("--------------- FILE CONTENT -----end----------");
-			}
+			log.info("--------------- FILE CONTENT -----end----------");
 			
 			br.close();
 			fr.close();
@@ -138,10 +127,7 @@ public class CsvReader implements ICsvReader {
 				for(int i = 1; i < rows.size(); i++ ) {
 					if(rows.get(i).size() != countOfColumns) {
 						String error = "Error in line " + i + ". Founded " + rows.get(i).size() + " fields but header has got " + countOfColumns + " fields";
-						
-						if(csvAtt.verboseEnable) 
-							System.out.println(error);
-						
+						log.error(error);
 						throw new Exception(error);
 					}
 				}
@@ -154,10 +140,7 @@ public class CsvReader implements ICsvReader {
 					
 					if(i>=1 && countOfColumns!=prevNumOfFields) {
 						String error = "Error in line " + i + ". Founded " + countOfColumns + " fields but previous line has got " + prevNumOfFields + " fields";
-						
-						if(csvAtt.verboseEnable) 
-							System.out.println(error);
-						
+						log.error(error);
 						throw new Exception(error);
 						
 					}
@@ -182,21 +165,18 @@ public class CsvReader implements ICsvReader {
 		return this.rows;
 	}
 	
-	public void printInfo() {		
-		System.out.println("--------------- CSV INFO ------------------");		
-		System.out.println("url : " + csvAtt.url);
-		System.out.println("filename : " + csvAtt.filename);
-		System.out.println("separator :	" + csvAtt.separator);
-		System.out.println("delimiter :	" + csvAtt.delimiter);
-		System.out.println("escape :	" + csvAtt.escape);		
-		System.out.println("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
+	public void printInfo() {				
+		log.info("url : " + csvAtt.url);
+		log.info("filename : " + csvAtt.filename);
+		log.info("separator :	" + csvAtt.separator);
+		log.info("delimiter :	" + csvAtt.delimiter);
+		log.info("escape :	" + csvAtt.escape);		
+		log.info("firstLineIsHeader :	" + csvAtt.firstLineIsHeader);	
 		if(csvAtt.firstLineIsHeader) 
-				System.out.println("header : " + header);		
+				log.info("header : " + header);		
+		log.info("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + rows.size());	
+		log.info("columns " + countOfColumns);	
 		
-		System.out.println("records " + (csvAtt.firstLineIsHeader?"(excluding header)":"")   + " : " + rows.size());	
-		System.out.println("columns " + countOfColumns);	
-		
-		System.out.println("--------------- CSV INFO ----end-----------");				
 	}
 	
 	
