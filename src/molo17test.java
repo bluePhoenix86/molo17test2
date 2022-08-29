@@ -67,10 +67,10 @@ public class molo17test {
 			if(args[i].equals("-db.oracle.password")) oraclePassword= args[i+1]; 
 			if(args[i].equals("-db.oracle.defaultschema")) oracleDefaultSchema= args[i+1]; 
 			
-			if( !oracleTnsname.isBlank() && !oracleTnsname.isEmpty() &&
-				!oracleUsername.isBlank() && !oracleUsername.isEmpty() &&
-				!oraclePassword.isBlank() && !oraclePassword.isEmpty() &&
-				!oracleDefaultSchema.isBlank() && !oracleDefaultSchema.isEmpty()) {
+			if( oracleTnsname!=null && !oracleTnsname.isEmpty() &&
+				oracleUsername!=null  && !oracleUsername.isEmpty() &&
+				oraclePassword!=null  && !oraclePassword.isEmpty() &&
+				oracleDefaultSchema!=null && !oracleDefaultSchema.isEmpty()) {
 				
 					dbConn= new DbConnOracle(oracleTnsname, oracleUsername, oraclePassword, oracleDefaultSchema);
 			}
@@ -80,7 +80,7 @@ public class molo17test {
 			
 		}
 		
-		if(csvAtt.filename==null || csvAtt.filename.isBlank() || csvAtt.filename.isEmpty()) {
+		if(csvAtt.filename==null || csvAtt.filename==null || csvAtt.filename.isEmpty()) {
 			System.out.println("Missing FILENAME");
 			printOptions();
 			System.exit(1);
