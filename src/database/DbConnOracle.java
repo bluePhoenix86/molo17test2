@@ -1,4 +1,4 @@
-package csv.database;
+package database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;

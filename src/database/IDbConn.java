@@ -1,4 +1,4 @@
-package csv.database;
+package database;
 
 import java.util.List;
 import java.sql.ResultSet;

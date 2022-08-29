@@ -1,6 +1,7 @@
 import csv.CsvAttributes;
 import csv.CsvReader;
-import csv.database.*;
+import database.*;
+
 import java.sql.ResultSet;
 import org.apache.log4j.Logger;  
 
@@ -23,7 +24,7 @@ public class molo17test {
 		System.out.println("\t -csv.escape ESCAPE_CHAR. Default [\\]");
 		System.out.println("\t -csv.firstLineIsHeader 0/1. Default 1 ");
 		System.out.println();		
-		System.out.println("\t-db.sqlite DBFILE. Default dbTest.sqllite (path UNIX format) --THIS IS THE DEFAULT OPTION--");
+		System.out.println("\t-db.sqlite DBFILE. Default dbTest.sqlite (path UNIX format) --THIS IS THE DEFAULT OPTION--");
 		System.out.println("not implemented yet");		
 		System.out.println("\t-db.oracle.tnsname TNSNAME_fileName");
 		System.out.println("\t-db.oracle.username USERNAME");
@@ -67,10 +68,10 @@ public class molo17test {
 			if(args[i].equals("-db.oracle.password")) oraclePassword= args[i+1]; 
 			if(args[i].equals("-db.oracle.defaultschema")) oracleDefaultSchema= args[i+1]; 
 			
-			if( oracleTnsname!=null && !oracleTnsname.isEmpty() &&
-				oracleUsername!=null  && !oracleUsername.isEmpty() &&
-				oraclePassword!=null  && !oraclePassword.isEmpty() &&
-				oracleDefaultSchema!=null && !oracleDefaultSchema.isEmpty()) {
+			if( !oracleTnsname.isEmpty() && !oracleTnsname.isEmpty() &&
+				!oracleUsername.isEmpty() && !oracleUsername.isEmpty() &&
+				!oraclePassword.isEmpty() && !oraclePassword.isEmpty() &&
+				!oraclePassword.isEmpty() && !oracleDefaultSchema.isEmpty()) {
 				
 					dbConn= new DbConnOracle(oracleTnsname, oracleUsername, oraclePassword, oracleDefaultSchema);
 			}
@@ -87,7 +88,7 @@ public class molo17test {
 		}
 		
 		if(useDefaultDb) {
-			dbConn= new DbConnSQLite("dbTest.sqllite"); 
+			dbConn= new DbConnSQLite("dbTest.sqlite"); 
 		}
 		
 	}
