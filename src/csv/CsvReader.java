@@ -27,9 +27,9 @@ public class CsvReader implements ICsvReader {
 	private void initFile() throws Exception {
 		String filePathString= new String();
 		
-		if (!csvAtt.url.isBlank() && 
+		if (csvAtt.url!=null && 
 			!csvAtt.url.isEmpty() && 
-			!csvAtt.filename.isBlank() && 
+			csvAtt.filename!=null && 
 			!csvAtt.filename.isEmpty()) {
 			filePathString = csvAtt.url + "/" + csvAtt.filename; 
 			

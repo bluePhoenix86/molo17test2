@@ -1,40 +1,61 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="molo17test"  basedir="." default="main">
 
-<project>
-	<path id="libs">
-	    <pathelement location="libs/sqlite-jdbc-3.36.0.3.jar"/>
-	    <pathelement location="libs/log4j-1.2.17.jar"/>		
-	</path>	
-	
-	 <target name="all" depends="clean,compile,jar,run" description="the main project">
-	  </target>
+    <property name="src.dir"     value="src"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="main-class"  value="molo17test"/>
+    <property name="lib.dir"     value="libs"/>
+    <property name="scripts.dir" value="scripts"/>	
+    <property name="csv.dir" 	 value="csv"/>	
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>	
 	
     <target name="clean">
-        <delete dir="build"/>
+        <delete dir="${build.dir}"/>
     </target>
 
     <target name="compile">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes" includeantruntime="true">
-        	  <classpath>
-        	    <path refid="libs" />
-        	  </classpath>        
-        </javac>
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
+        <copy todir="${classes.dir}">
+            <fileset dir="${src.dir}" excludes="**/*.java"/>
+        </copy>    	
     </target>
 
-	
-    <target name="jar">
-        <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/molo17test.jar" basedir="build/classes">
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
             <manifest>
-                <attribute name="Main-Class" value="molo17test"/>
+                <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
-        </jar>
+        </jar>   	
+        <copy todir="${jar.dir}/libs">
+            <fileset dir="${lib.dir}" excludes="**/*.java"/>
+        </copy>
+        <copy todir="${jar.dir}/csv">
+            <fileset dir="${csv.dir}"/>        	
+        </copy>    	
+        <copy todir="${jar.dir}">
+            <fileset dir="${scripts.dir}"/>        	
+            <fileset dir="." includes="**/*.sqlite"/>
+        </copy>
+        <delete dir="${jar.dir}/build"/>
     </target>
 
-    <target name="run">
-        <java jar="build/jar/molo17test.jar" fork="true"/>
+    <target name="run" depends="jar">
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        </java>
     </target>
 
+    <target name="clean-build" depends="clean,jar"/>
+
+    <target name="main" depends="clean,run"/>
+	
 </project>
-
